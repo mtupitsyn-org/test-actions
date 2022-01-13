@@ -1,10 +1,10 @@
-name: license-check
+name: debug-info-workflow
 
 on:
   push:
 
 jobs:
-  debug-info:
+  debug-info-job:
     runs-on: ubuntu-latest
     steps:
     - name: Printenv
