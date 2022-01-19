@@ -1,4 +1,3 @@
 # test-actions
-
-Sandbox for GitHub actions and workflows
+Test various actions execution on a self-hosted runners.
 

@@ -1,0 +1,77 @@
+sqren/backport-github-action@v1.0.40:
+https://github.com/mtupitsyn/werckertest/runs/3705055952?check_suite_focus=true
+    ✔ 100% Cloning repository (one-time operation)
+    {"meta":{"killed":false,"code":2,"signal":null,"cmd":"git remote rm mtupitsyn","stdout":"","stderr":"error: No such remote: 'mtupitsyn'\n"},"level":"info","message":"exec error 'git remote rm mtupitsyn':"}
+
+
+    ⚠️  Ouch! An unknown error occured 😿
+    Error message: Command failed: git remote rm mtupitsyn
+    error: No such remote: 'mtupitsyn'
+
+    Please open an issue in https://github.com/sqren/backport/issues or contact me directly on https://twitter.com/sorenlouv
+    For additional details see the logs: /home/runner/.backport/backport.log
+    {"meta":{"killed":false,"code":2,"signal":null,"cmd":"git remote rm mtupitsyn","stdout":"","stderr":"error: No such remote: 'mtupitsyn'\n"},"level":"info","message":"Unknown error:"}
+
+
+tibdex/backport@v1
+https://github.com/mtupitsyn/werckertest/runs/3759517637?check_suite_focus=true  /usr/bin/git switch release/1.0
+  Switched to a new branch 'release/1.0'
+  Branch 'release/1.0' set up to track remote branch 'release/1.0' from 'origin'.
+  /usr/bin/git switch --create backport-4-to-release/1.0
+  Switched to a new branch 'backport-4-to-release/1.0'
+  /usr/bin/git cherry-pick 9ef858ec51c0b8af0be8ab29243031fc90976901
+  error: commit 9ef858ec51c0b8af0be8ab29243031fc90976901 is a merge but no -m option was given.
+  fatal: cherry-pick failed
+  /usr/bin/git cherry-pick --abort
+  error: no cherry-pick or revert in progress
+  fatal: cherry-pick failed
+  Error: Error: The process '/usr/bin/git' failed with exit code 128
+
+radcordez/backport-action@main
+works, but slow (need to start jvm) and little config options
+
+cristiammercado/backport-pr@v1
+not integrated with labels
+
+Gaurav0/backport@v1.0.26
+Requires bot username and key, little config options
+
+sbrunner (camptocamp):
++ /github/workspace: git -c http.extraheader=Authorization: basic *** push --set-upstream origin backport/6-to-release/1.0
+fatal: unable to access 'https://github.com/mtupitsyn/test-actions.git/': The requested URL returned error: 400
+Fail with message: Error on backporting to branch release/1.0, see Docker Hub actions for more information.
+Traceback (most recent call last):
+  File "/usr/bin/backport", line 365, in main
+    backport(number, match_tag.group(1))
+  File "/usr/bin/backport", line 249, in backport
+    check_call(
+  File "/usr/bin/backport", line 31, in check_call
+    subprocess.check_call(cmd, **kwargs)
+  File "/usr/lib/python3.8/subprocess.py", line 364, in check_call
+    raise CalledProcessError(retcode, cmd)
+subprocess.CalledProcessError: Command '['git', '-c', 'http.extraheader=Authorization: basic ***', 'push', '--set-upstream', 'origin', 'backport/6-to-release/1.0']' returned non-zero exit status 128.
+
+Nathanmalnoury/gh-backport-action@master:
+configuration requires hardcoding of branch name
+
+syndesisio/backport-action@v1;
+works, but only on one backport branch. 2nd branch can not clone:
+Run syndesisio/backport-action@v1
+Run /home/runner/work/_actions/syndesisio/backport-action/v1/backport.sh
+  /home/runner/work/_actions/syndesisio/backport-action/v1/backport.sh
+  shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+  env:
+    INPUT_TOKEN: ***
+Environment
+Checking token
+Performing backport
+Checking token
+Performing backport
+  Error: Unable to clone from repository `https://github.com/mtupitsyn/test-actions.git` a branch named `release/1.1`, this should not have happened ()
+Error: Process completed with exit code 1.
+little config options
+no branch existence check at label assignment
+
+jud/hotfix@v1:
+does not support merge commits
+
