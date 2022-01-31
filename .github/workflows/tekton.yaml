@@ -1,0 +1,50 @@
+name: "Demonstrate using Tekton Pipelines in GitHub Actions"
+on: [pull_request, push]
+
+jobs:
+  tekton:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: engineerd/setup-kind@v0.1.0
+    - name: Install jq
+      run: |
+        sudo apt-get install jq
+    - name: Install Tekton
+      run: |
+        export KUBECONFIG="$(kind get kubeconfig-path)"
+        kubectl apply -f https://storage.googleapis.com/tekton-releases/latest/release.yaml
+    - name: Install Kubeval Tekton Task
+      run: |
+        export KUBECONFIG="$(kind get kubeconfig-path)"
+        kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/master/kubeval/kubeval.yaml
+    - name: Run Kubeval Task
+      run: |
+        export KUBECONFIG="$(kind get kubeconfig-path)"
+        kubectl apply -f taskrun.yaml
+        STATUS=$(kubectl get taskrun kubeval-example -o json | jq -rc .status.conditions[0].status)
+        LIMIT=$((SECONDS+180))
+        while [ "${STATUS}" != "Unknown" ]; do
+          if [ $SECONDS -gt $LIMIT ]
+          then
+            echo "Timeout waiting for taskrun to complete"
+            exit 2
+          fi
+          sleep 10
+          echo "Waiting for taskrun to complete"
+          STATUS=$(kubectl get taskrun kubeval-example -o json | jq -rc .status.conditions[0].status)
+        done
+    - name: Install Tekton CLI
+      run: |
+        curl -LO https://github.com/tektoncd/cli/releases/download/v0.2.2/tkn_0.2.2_Linux_x86_64.tar.gz
+        sudo tar xvzf tkn_0.2.2_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn
+    - name: Get TaskRun Logs
+      run: |
+        export KUBECONFIG="$(kind get kubeconfig-path)"
+        tkn taskrun logs kubeval-example -a -f
+    - name: Result
+      run: |
+        export KUBECONFIG="$(kind get kubeconfig-path)"
+        REASON=$(kubectl get taskrun kubeval-example -o json | jq -rc .status.conditions[0].reason)
+        echo "The job ${REASON}"
+        test ${REASON} != "Failed"
