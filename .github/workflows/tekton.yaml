@@ -22,7 +22,26 @@ jobs:
     - name: Run Kubeval Task
       run: |
         export KUBECONFIG="$(kind get kubeconfig-path)"
-        kubectl apply -f taskrun.yaml
+        cat <<EOF | kubectl apply -f -
+        apiVersion: tekton.dev/v1alpha1
+        kind: TaskRun
+        metadata:
+          name: kubeval-example
+        spec:
+          taskRef:
+            name: kubeval
+          inputs:
+            resources:
+            - name: source
+              resourceSpec:
+                type: git
+                params:
+                - name: revision
+                  value: master
+                - name: url
+                  value: https://github.com/instrumenta/conftest.git
+        EOF
+        # kubectl apply -f taskrun.yaml
         STATUS=$(kubectl get taskrun kubeval-example -o json | jq -rc .status.conditions[0].status)
         LIMIT=$((SECONDS+180))
         while [ "${STATUS}" != "Unknown" ]; do
