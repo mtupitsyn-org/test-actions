@@ -17,7 +17,8 @@ jobs:
     - name: Install Kubeval Tekton Task
       run: |
         export KUBECONFIG="$(kind get kubeconfig-path)"
-        kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/kubeval/0.1/kubeval.yaml
+        # kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/kubeval/0.1/kubeval.yaml
+        kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/v1alpha1/kubeval/kubeval.yaml
     - name: Run Kubeval Task
       run: |
         export KUBECONFIG="$(kind get kubeconfig-path)"
